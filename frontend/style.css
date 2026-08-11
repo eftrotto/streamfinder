@@ -13,11 +13,15 @@
   font-weight: 400;
 }
 
-/* Centralizei o body aqui */
+/* Centralizei o body aqui, agora na vertical também */
 body {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   text-align: center;
+  min-height: 100vh;
+  margin: 0;
 }
 
 /* Fiz o destaquezinho roxo ali */
@@ -31,4 +35,10 @@ span {
   font-size: 3rem;
   font-weight: bolder;
   line-height: 1.2;
+}
+
+/* Controlei o tamanho da logo pra não ficar gigante */
+#logo {
+  height: 60px;
+  width: auto;
 }
