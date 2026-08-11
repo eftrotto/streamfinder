@@ -32,13 +32,62 @@ span {
 
 /* Deixei o título grande e em negrito */
 .title {
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: bolder;
   line-height: 1.2;
+}
+
+/* Aumentei um pouco o subtítulo também */
+header h4 {
+  font-size: 1.3rem;
+  font-weight: 400;
 }
 
 /* Controlei o tamanho da logo pra não ficar gigante */
 #logo {
   height: 60px;
   width: auto;
+}
+
+/* Estilizei a barra de pesquisa */
+#search-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+#movie-input {
+  background-color: #24252f;
+  border: 2px solid #33343f;
+  border-radius: 999px;
+  padding: 0.9rem 1.5rem;
+  font-size: 1rem;
+  color: var(--color-text);
+  width: 320px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+#movie-input:focus {
+  border-color: var(--color-primary);
+}
+
+#movie-input::placeholder {
+  color: #8a8b99;
+}
+
+#search-form button {
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  border: none;
+  border-radius: 999px;
+  padding: 0.9rem 1.8rem;
+  font-size: 1rem;
+  font-weight: bolder;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#search-form button:hover {
+  background-color: #7d82e0;
 }
