@@ -1,0 +1,34 @@
+/* Defini as cores principais do projeto */
+:root {
+  --color-background: #191a22;
+  --color-text: #ffffff;
+  --color-primary: #666ccf;
+}
+
+/* Mudei a fonte e botei a cor do fundo e do texto */
+* {
+  font-family: Inter, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-weight: 400;
+}
+
+/* Centralizei o body aqui */
+body {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Fiz o destaquezinho roxo ali */
+span {
+  color: var(--color-primary);
+  font-weight: bolder;
+}
+
+/* Deixei o título grande e em negrito */
+.title {
+  font-size: 3rem;
+  font-weight: bolder;
+  line-height: 1.2;
+}
