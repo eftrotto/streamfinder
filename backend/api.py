@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-#Enable CORS
+#Enable CORS - para conseguir requisições de ambas as portas
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # em produção, troque "*" pela URL real do seu frontend
