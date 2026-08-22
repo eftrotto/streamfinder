@@ -9,9 +9,9 @@ This project was built as a hands-on way to learn **FastAPI**, backend/frontend 
 
 ## Features
 
-- 🔎 **Search**: find which streaming platforms currently host a given movie
-- 📋 **Watchlist** *(planned)*: save movies you want to watch
-- 💡 **Subscription recommender** *(planned)*: suggests the smallest combination of subscriptions that covers your watchlist, using a greedy set cover algorithm
+- **Search**: find which streaming platforms currently host a given movie
+- **Watchlist** *(planned)*: save movies you want to watch
+- **Subscription recommender** *(planned)*: suggests the smallest combination of subscriptions that covers your watchlist, using a greedy set cover algorithm
 
 ---
 
