@@ -69,7 +69,7 @@ Open `frontend/index.html` using a live server (e.g. VS Code's Live Server exten
 
 - [x] Basic FastAPI setup with search endpoint
 - [x] Frontend connected to backend via `fetch`
-- [ ] Integrate real streaming availability data
+- [x] Integrate real streaming availability data
 - [ ] Watchlist creation and persistence
 - [ ] Subscription recommendation engine (greedy set cover)
 - [ ] Ratings display
