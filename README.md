@@ -76,6 +76,6 @@ Open `frontend/index.html` using a live server (e.g. VS Code's Live Server exten
 
 ---
 
-## Author
+## Authors
 
 Made by [eftrotto](https://github.com/eftrotto) and [gvfirmeza](https://github.com/gvfirmeza) a project born out of curiosity for FastAPI, movies, and a good algorithmic challenge.
