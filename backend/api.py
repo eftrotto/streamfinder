@@ -29,8 +29,14 @@ async def root():
 
 @app.get("/busca/{user_busca}")
 async def read_item(user_busca: str):
-    provedores = str(busca_filme_tmdb(user_busca))
-    return {"message": "O filme "+ user_busca + " tem na " + provedores}
+    provedores = busca_filme_tmdb(user_busca)
+
+    # Retornando mensagem quando não tem provedor
+    
+    if not provedores:
+        return {"message": f"Não encontramos onde assistir '{user_busca}' no momento."}
+    
+    return {"message": "O filme " + user_busca + " tem na " + ', '.join(provedores)}
 
 # Pegar oq o usuario digitou e buscar no TMDB
 def busca_filme_tmdb(filme_procurado):
