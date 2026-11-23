@@ -78,6 +78,20 @@ function criarPoster(data) {
     return img;
 }
 
+// Logo do streaming (nome no tooltip). Sem logo, cai de volta pro nome em texto.
+function criarLogoProvedor(provedor) {
+    if (!provedor.logo) {
+        return criarElemento("span", "chip", provedor.nome);
+    }
+    const img = document.createElement("img");
+    img.className = "logo-provedor";
+    img.src = provedor.logo;
+    img.alt = provedor.nome;
+    img.title = provedor.nome;
+    img.loading = "lazy";
+    return img;
+}
+
 function criarProvedores(provedores) {
     const bloco = criarElemento("div", "card-provedores");
 
@@ -95,8 +109,8 @@ function criarProvedores(provedores) {
         grupo.append(criarElemento("span", "card-grupo-titulo", ROTULOS[tipo]));
 
         const chips = criarElemento("div", "chips");
-        for (const nome of provedores[tipo]) {
-            chips.append(criarElemento("span", `chip chip-${tipo}`, nome));
+        for (const provedor of provedores[tipo]) {
+            chips.append(criarLogoProvedor(provedor));
         }
         grupo.append(chips);
         bloco.append(grupo);

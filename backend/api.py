@@ -10,6 +10,7 @@ load_dotenv()
 
 URL_TMDB = "https://api.themoviedb.org/3"
 URL_IMAGEM = "https://image.tmdb.org/t/p/w500"  # poster_path do TMDB é só o final da URL
+URL_LOGO = "https://image.tmdb.org/t/p/w92"  # logo_path dos provedores (imagem pequena basta)
 REGIAO = "BR"
 TIMEOUT = 10  # segundos de espera por resposta do TMDB
 
@@ -84,6 +85,12 @@ def provider_pelo_id(id_filme):
     for tipo in ("flatrate", "rent", "buy"):
         # ordena pela prioridade do TMDB (menor = mais relevante), sem descartar ninguém
         lista = sorted(regiao.get(tipo, []), key=lambda p: p.get("display_priority", 999))
-        provedores[tipo] = [p["provider_name"] for p in lista]
+        provedores[tipo] = [
+            {
+                "nome": p["provider_name"],
+                "logo": f"{URL_LOGO}{p['logo_path']}" if p.get("logo_path") else None,
+            }
+            for p in lista
+        ]
 
     return provedores

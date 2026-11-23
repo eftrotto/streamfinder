@@ -183,9 +183,12 @@ header h4 {
   background-color: #2d2e3b;
 }
 
-.chip-flatrate {
-  border-color: var(--color-primary);
-  background-color: rgba(102, 108, 207, 0.25);
+.logo-provedor {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .card-aviso {
