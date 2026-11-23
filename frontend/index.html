@@ -7,8 +7,6 @@
     <title>StreamFinder</title>
     <!-- Pro CSS funcionar no seu HTML vc tem que adicionar essa linha aqui debaixo, que linka o arquivo de estilo com o html -->
     <link rel="stylesheet" href="style.css">
-    <!-- Linka o javascript -->
-    <script src="script.js" defer></script>
 </head>
 
 <body>
@@ -22,17 +20,17 @@
     </header>
 
     <main>
-        <form id="search-form">
+        <form id="search-form" action="filme.html" method="get">
             <input 
                 type="text" 
-                id="movie-input" 
+                id="movie-input"
+                name="busca"
+
                 placeholder="Digite o nome de um filme..." 
                 required
             >
             <button type="submit">Buscar</button>
         </form>
-
-        <div id="results"></div>
 
     </main>
 

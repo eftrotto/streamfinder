@@ -50,7 +50,7 @@ def read_item(user_busca: str):
         "titulo": filme["title"],
         "ano": (filme.get("release_date") or "")[:4],
         "data_lancamento": filme.get("release_date") or "",  # "AAAA-MM-DD" (ou vazio)
-        "sinopse": filme.get("overview") or "",
+        "sinopse": filme.get("overview") or "", # or = fallback
         "poster": f"{URL_IMAGEM}{poster}" if poster else None,
         "provedores": provider_pelo_id(filme["id"]),
     }

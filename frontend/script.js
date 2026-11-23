@@ -1,8 +1,8 @@
+// Script da página filme.html: lê o título da URL (?busca=...), consulta a API e mostra o card.
+
 // Endereço da API. Ao publicar o backend, troque só esta linha.
 const API_URL = "http://127.0.0.1:8000";
 
-const form = document.getElementById("search-form");
-const input = document.getElementById("movie-input");
 const resultsSection = document.getElementById("results");
 
 // Nome de cada tipo de provedor, na ordem em que aparecem na tela
@@ -12,11 +12,15 @@ const ROTULOS = {
     buy: "Compra",
 };
 
-form.addEventListener("submit", async (event) => {
-    event.preventDefault(); // impede o form de recarregar a página (comportamento padrão do HTML)
+async function carregarFilme() {
+    const filme = (new URLSearchParams(location.search).get("busca") || "").trim();
 
-    const filme = input.value.trim();
-    if (!filme) return;
+    if (!filme) {
+        mostrarTexto("Nenhum filme informado. Volte e faça uma busca.");
+        return;
+    }
+
+    mostrarTexto("Buscando...");
 
     try {
         const response = await fetch(`${API_URL}/busca/${encodeURIComponent(filme)}`);
@@ -33,13 +37,14 @@ form.addEventListener("submit", async (event) => {
         }
 
         const data = await response.json();
+        document.title = `${data.titulo} - StreamFinder`;
         renderizarResultado(data);
 
     } catch (erro) {
         console.error("Erro ao buscar filme:", erro);
         mostrarTexto("Algo deu errado. Tenta de novo.");
     }
-});
+}
 
 // textContent (e não innerHTML) pra nunca interpretar o texto como HTML
 function criarParagrafo(texto) {
@@ -132,3 +137,5 @@ function renderizarResultado(data) {
 
     resultsSection.replaceChildren(card);
 }
+
+carregarFilme();
