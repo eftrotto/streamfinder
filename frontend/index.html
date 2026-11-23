@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <!-- Boiler plate = ! +tab-->
-<html lang="en" >
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StreamFinder</title>
     <!-- Pro CSS funcionar no seu HTML vc tem que adicionar essa linha aqui debaixo, que linka o arquivo de estilo com o html -->
     <link rel="stylesheet" href="style.css">
+    <script src="config.js" defer></script>
+    <script src="carrossel.js" defer></script>
 </head>
 
 <body>
@@ -32,14 +34,19 @@
             <button type="submit">Buscar</button>
         </form>
 
+        <!-- Carrossel: fica escondido até a API responder (carrossel.js) -->
+        <section id="populares" class="carrossel" aria-label="Filmes mais populares da semana" hidden>
+            <h3 class="carrossel-titulo">Em alta esta semana</h3>
+            <div class="carrossel-janela">
+                <ul class="carrossel-trilho" id="carrossel-trilho"></ul>
+            </div>
+        </section>
     </main>
 
     <footer>
         <p>&copy; 2026 StreamFinder. Todos os direitos reservados.</p>
         <nav>
             <a href="mailto:vgt@gmail.com">Fale conosco</a>
-            <Br>
-            <Br>
             <a href="https://github.com/eftrotto/streamfinder" target="_blank" rel="noopener noreferrer">Saiba mais</a>
         </nav>
     </footer>

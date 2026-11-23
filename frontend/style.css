@@ -1,19 +1,31 @@
-/* Defini as cores principais do projeto */
+/* ========== Identidade visual ==========
+   Paleta tirada do logo: ciano e azul-elétrico sobre um fundo azul bem escuro.
+   Pra mudar o visual do site todo, mexa só nestas variáveis. */
 :root {
-  --color-background: #191a22;
-  --color-text: #ffffff;
-  --color-primary: #666ccf;
+  --color-background: #080b16;
+  --color-surface: #11162a;     /* cards e campo de busca */
+  --color-surface-2: #1a2140;   /* itens dentro dos cards */
+  --color-border: #242c52;
+  --color-text: #f3f6ff;
+  --color-text-soft: #c9d1ee;   /* textos longos (sinopse) */
+  --color-muted: #8892b8;       /* datas, avisos, rodapé */
+  --color-primary: #3dc2ff;     /* destaque (links, títulos pequenos) */
+  --gradient-brand: linear-gradient(135deg, #22d3ee 0%, #4f8cff 60%, #6d6bff 100%);
 }
 
-/* Mudei a fonte e botei a cor do fundo e do texto */
+/* Fonte e cor do texto valem pro site todo. O fundo fica só no body/html. */
 * {
   font-family: Inter, sans-serif;
-  background-color: var(--color-background);
   color: var(--color-text);
   font-weight: 400;
 }
 
-/* Centralizei o body aqui, agora na vertical também */
+html {
+  background-color: var(--color-background);
+}
+
+/* Conteúdo centralizado na vertical e na horizontal. O padding garante respiro em cima e
+   embaixo mesmo quando a página é mais alta que a tela (o logo não gruda mais no topo). */
 body {
   display: flex;
   flex-direction: column;
@@ -22,81 +34,255 @@ body {
   text-align: center;
   min-height: 100vh;
   margin: 0;
+  padding: clamp(1.5rem, 5vh, 3.5rem) 0;
+  box-sizing: border-box;
+  /* um brilho azul suave atrás do logo, como se ele iluminasse a página */
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(61, 194, 255, 0.16), transparent 70%),
+    var(--color-background);
 }
 
-/* Fiz o destaquezinho roxo ali */
-span {
-  color: var(--color-primary);
-  font-weight: bolder;
+/* Foco do teclado bem visível */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
 }
 
-/* Deixei o título grande e em negrito */
-.title {
-  font-size: 4rem;
-  font-weight: bolder;
-  line-height: 1.2;
-}
-
-/* Aumentei um pouco o subtítulo também */
-header h4 {
-  font-size: 1.3rem;
-  font-weight: 400;
-}
-
-/* Controlei o tamanho da logo pra não ficar gigante */
+/* ---------- Topo: logo, título e subtítulo ---------- */
 #logo {
-  height: 60px;
+  height: clamp(56px, 9vh, 84px);
   width: auto;
 }
 
-/* Estilizei a barra de pesquisa */
+.title {
+  margin: 0.75rem 0 0.5rem;
+  font-size: clamp(2rem, 3.6vw, 3.75rem); /* acompanha a largura da tela (e não estoura no celular) */
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+/* "Finder" com o degradê da marca */
+.title span {
+  font-weight: 800;
+  color: transparent;
+  background-image: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+header h4 {
+  margin: 0;
+  font-size: clamp(1rem, 1.3vw, 1.3rem);
+  color: var(--color-muted);
+}
+
+/* ---------- Barra de pesquisa ---------- */
 #search-form {
   display: flex;
   gap: 0.5rem;
-  margin-top: 2rem;
-  color-scheme: white;
+  margin-top: 1.75rem;
+  color-scheme: dark;
 }
 
 #movie-input {
-  background-color: #24252f;
-  border: 2px solid #33343f;
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-border);
   border-radius: 999px;
   padding: 0.9rem 1.5rem;
   font-size: 1rem;
-  color: var(--color-text);
-  width: 320px;
+  width: clamp(220px, 30vw, 440px);
   outline: none;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 #movie-input:focus {
   border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(61, 194, 255, 0.18);
 }
 
 #movie-input::placeholder {
-  color: #8a8b99;
+  color: var(--color-muted);
 }
 
 #search-form button {
-  background-color: var(--color-primary);
-  color: var(--color-text);
+  background-image: var(--gradient-brand);
+  color: #04101f; /* texto escuro: contrasta melhor com o degradê claro */
   border: none;
   border-radius: 999px;
   padding: 0.9rem 1.8rem;
   font-size: 1rem;
-  font-weight: bolder;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
 #search-form button:hover {
-  background-color: #7d82e0;
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+  box-shadow: 0 8px 22px rgba(61, 194, 255, 0.35);
+}
+
+/* ---------- Carrossel de populares (home) ---------- */
+/* o main ocupa a largura toda; sem isso ele encolhe pro tamanho do trilho e o carrossel não rola */
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* a esteira ocupa a tela de ponta a ponta e o tamanho do pôster acompanha a largura do monitor */
+.carrossel {
+  --poster-largura: clamp(130px, 10vw, 240px);
+  --poster-espaco: clamp(0.75rem, 1.2vw, 1.5rem);
+  width: 100%;
+  margin-top: clamp(1.75rem, 5vh, 3.5rem);
+}
+
+.carrossel-titulo {
+  margin: 0 0 0.75rem;
+  padding: 0 var(--poster-espaco);
+  text-align: left;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-soft);
+}
+
+/* barrinha com o degradê da marca antes do título */
+.carrossel-titulo::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 1.1em;
+  margin-right: 0.65rem;
+  border-radius: 2px;
+  background-image: var(--gradient-brand);
+  vertical-align: -0.2em;
+}
+
+/* Esteira: a janela esconde o que passa dos lados e o trilho anda sozinho */
+.carrossel-janela {
+  overflow: hidden;
+  padding: 12px 0; /* folga pro pôster "subir" no hover sem ser cortado */
+  /* esmaece as bordas, pra os pôsteres entrarem e saírem suave */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+}
+
+.carrossel-trilho {
+  display: flex;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* a lista é desenhada 3x; andar 1/3 do trilho e recomeçar fica sem emenda */
+  animation: esteira var(--duracao, 40s) linear infinite;
+}
+
+/* passou o mouse ou focou com o teclado: pausa, pra dar tempo de clicar */
+.carrossel-janela:hover .carrossel-trilho,
+.carrossel-janela:focus-within .carrossel-trilho {
+  animation-play-state: paused;
+}
+
+@keyframes esteira {
+  to {
+    transform: translateX(calc(-100% / 3));
+  }
+}
+
+.carrossel-item {
+  flex: 0 0 auto;
+  margin-right: var(--poster-espaco); /* margem (e não gap) pra cada cópia da lista ter largura exata */
+}
+
+.carrossel-item a {
+  display: block;
+  border-radius: 14px;
+  outline-offset: 4px;
+}
+
+.carrossel-item img {
+  display: block;
+  width: var(--poster-largura);
+  height: auto;
+  aspect-ratio: 2 / 3; /* proporção dos pôsteres do TMDB */
+  object-fit: cover;
+  border-radius: 14px;
+  background-color: var(--color-surface);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.carrossel-item a:hover img,
+.carrossel-item a:focus-visible img {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--color-primary), 0 0 24px rgba(61, 194, 255, 0.35);
+}
+
+/* quem prefere menos movimento: sem animação, só rola com o dedo/mouse */
+@media (prefers-reduced-motion: reduce) {
+  .carrossel-janela {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .carrossel-trilho {
+    animation: none;
+  }
+
+  .carrossel-clone {
+    display: none;
+  }
+
+  .carrossel-item img,
+  #search-form button {
+    transition: none;
+  }
+}
+
+/* ---------- Rodapé: tudo em uma linha ---------- */
+footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem 1.75rem;
+  margin-top: clamp(1.5rem, 4vh, 2.5rem);
+  padding: 0 1rem;
+  font-size: 0.85rem;
+}
+
+footer p {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+footer nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+footer a {
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+footer a:hover {
+  color: var(--color-text);
+  text-decoration: underline;
 }
 
 /* ---------- Menu da página do filme ---------- */
 .topo-nav {
   align-self: stretch;
-  padding: 1.25rem 2rem;
+  padding: 0 2rem 1rem;
   text-align: left;
 }
 
@@ -109,7 +295,7 @@ header h4 {
 }
 
 .topo-nav a {
-  font-weight: bolder;
+  font-weight: 700;
   text-decoration: none;
   color: var(--color-primary);
 }
@@ -120,7 +306,7 @@ header h4 {
 
 /* ---------- Card do filme ---------- */
 #results {
-  margin: 2rem 1rem;
+  margin: 1rem;
   width: 100%;
   max-width: 760px;
 }
@@ -129,16 +315,11 @@ header h4 {
   display: flex;
   gap: 1.5rem;
   text-align: left;
-  background-color: #24252f;
-  border: 2px solid #33343f;
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-border);
   border-radius: 20px;
   padding: 1.25rem;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
-}
-
-/* o "*" lá em cima pinta tudo de cor de fundo; dentro do card fica transparente */
-.card * {
-  background-color: transparent;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
 }
 
 .card-poster {
@@ -154,8 +335,8 @@ header h4 {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #33343f;
-  color: #8a8b99;
+  background-color: var(--color-surface-2);
+  color: var(--color-muted);
 }
 
 .card-info {
@@ -166,18 +347,19 @@ header h4 {
 .card-titulo {
   margin: 0;
   font-size: 1.8rem;
-  font-weight: bolder;
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
 
 .card-data {
   margin: 0.3rem 0 1rem;
-  color: #8a8b99;
+  color: var(--color-muted);
 }
 
 .card-sinopse {
   margin: 0 0 1.25rem;
   line-height: 1.5;
-  color: #d4d5df;
+  color: var(--color-text-soft);
 }
 
 .card-grupo {
@@ -188,7 +370,7 @@ header h4 {
   display: block;
   margin-bottom: 0.4rem;
   font-size: 0.8rem;
-  font-weight: bolder;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-primary);
@@ -204,8 +386,8 @@ header h4 {
   padding: 0.3rem 0.8rem;
   font-size: 0.85rem;
   border-radius: 999px;
-  border: 1px solid #44455a;
-  background-color: #2d2e3b;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-2);
 }
 
 .logo-provedor {
@@ -217,7 +399,7 @@ header h4 {
 }
 
 .card-aviso {
-  color: #8a8b99;
+  color: var(--color-muted);
 }
 
 /* celular: pôster em cima, informações embaixo */

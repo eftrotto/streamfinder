@@ -44,6 +44,31 @@ def read_item(user_busca: str):
     if not filme:
         raise HTTPException(status_code=404, detail=f"Não encontramos o filme '{user_busca}'.")
 
+    return montar_filme(filme)
+
+# Página do filme aberta a partir de um id exato (ex: clique no carrossel de populares)
+@app.get("/filme/{id_filme}")
+def filme_por_id(id_filme: int):
+    return montar_filme(tmdb_get(f"/movie/{id_filme}", language="pt-BR"))
+
+# Os 10 filmes mais populares da semana (para o carrossel da home)
+@app.get("/populares")
+def populares():
+    resposta = tmdb_get("/trending/movie/week", language="pt-BR")
+    filmes = [f for f in resposta.get("results", []) if f.get("poster_path")]  # carrossel precisa de pôster
+
+    return [
+        {
+            "id": f["id"],
+            "titulo": f["title"],
+            "ano": (f.get("release_date") or "")[:4],
+            "poster": f"{URL_IMAGEM}{f['poster_path']}",
+        }
+        for f in filmes[:10]
+    ]
+
+# Transforma um filme do TMDB no JSON que o front usa (a mesma forma em /busca e /filme)
+def montar_filme(filme):
     poster = filme.get("poster_path")
 
     return {

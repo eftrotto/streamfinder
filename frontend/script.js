@@ -1,7 +1,5 @@
-// Script da página filme.html: lê o título da URL (?busca=...), consulta a API e mostra o card.
-
-// Endereço da API. Ao publicar o backend, troque só esta linha.
-const API_URL = "http://127.0.0.1:8000";
+// Script da página filme.html: lê a URL (?busca=título ou ?id=número), consulta a API e mostra o card.
+// (API_URL vem do config.js)
 
 const resultsSection = document.getElementById("results");
 
@@ -13,9 +11,17 @@ const ROTULOS = {
 };
 
 async function carregarFilme() {
-    const filme = (new URLSearchParams(location.search).get("busca") || "").trim();
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id");
+    const busca = (params.get("busca") || "").trim();
 
-    if (!filme) {
+    // ?id= (vem do carrossel) acha o filme exato; ?busca= (vem da barra) pega o 1º resultado
+    let endereco;
+    if (id) {
+        endereco = `${API_URL}/filme/${encodeURIComponent(id)}`;
+    } else if (busca) {
+        endereco = `${API_URL}/busca/${encodeURIComponent(busca)}`;
+    } else {
         mostrarTexto("Nenhum filme informado. Volte e faça uma busca.");
         return;
     }
@@ -23,7 +29,7 @@ async function carregarFilme() {
     mostrarTexto("Buscando...");
 
     try {
-        const response = await fetch(`${API_URL}/busca/${encodeURIComponent(filme)}`);
+        const response = await fetch(endereco);
 
         // 404 = a API não achou o filme; a mensagem vem pronta em "detail"
         if (response.status === 404) {
