@@ -1,16 +1,23 @@
+import logging
 import os
+
 import requests
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
 URL_TMDB = "https://api.themoviedb.org/3"
+URL_IMAGEM = "https://image.tmdb.org/t/p/w500"  # poster_path do TMDB é só o final da URL
+REGIAO = "BR"
+TIMEOUT = 10  # segundos de espera por resposta do TMDB
+
+logger = logging.getLogger(__name__)
 
 headers = {
     "accept": "application/json",
-    "Authorization": f"Bearer {os.getenv("TMDB_TOKEN")}"
+    "Authorization": f"Bearer {os.getenv('TMDB_TOKEN', '')}"
 }
 
 app = FastAPI()
@@ -27,55 +34,56 @@ app.add_middleware(
 async def root():
     return {"message": "Testando api"}
 
-@app.get("/busca/{user_busca}")
-async def read_item(user_busca: str):
-    provedores = busca_filme_tmdb(user_busca)
+# O ":path" deixa o título conter "/" (ex: "Face/Off") sem quebrar a rota
+# Rota "def" (e não "async def"): o FastAPI roda em thread separada e o requests bloqueante não trava o servidor
+@app.get("/busca/{user_busca:path}")
+def read_item(user_busca: str):
+    filme = busca_filme_tmdb(user_busca)
 
-    # Retornando mensagem quando não tem provedor
-    
-    if not provedores:
-        return {"message": f"Não encontramos onde assistir '{user_busca}' no momento."}
-    
-    return {"message": "O filme " + user_busca + " tem na " + ', '.join(provedores)}
+    if not filme:
+        raise HTTPException(status_code=404, detail=f"Não encontramos o filme '{user_busca}'.")
 
-# Pegar oq o usuario digitou e buscar no TMDB
+    poster = filme.get("poster_path")
+
+    return {
+        "titulo": filme["title"],
+        "ano": (filme.get("release_date") or "")[:4],
+        "data_lancamento": filme.get("release_date") or "",  # "AAAA-MM-DD" (ou vazio)
+        "sinopse": filme.get("overview") or "",
+        "poster": f"{URL_IMAGEM}{poster}" if poster else None,
+        "provedores": provider_pelo_id(filme["id"]),
+    }
+
+# Faz um GET no TMDB. Qualquer falha (token inválido, timeout, TMDB fora do ar) vira erro 502
+def tmdb_get(caminho, **params):
+    try:
+        resposta = requests.get(f"{URL_TMDB}{caminho}", headers=headers, params=params, timeout=TIMEOUT)
+        resposta.raise_for_status()
+        return resposta.json()
+    except requests.RequestException as erro:
+        logger.error("Falha ao consultar o TMDB em %s: %s", caminho, erro)
+        raise HTTPException(status_code=502, detail="Não foi possível consultar o TMDB agora.")
+
+# Pegar oq o usuario digitou e buscar no TMDB (devolve o primeiro resultado, ou None)
 def busca_filme_tmdb(filme_procurado):
-    url = f"{URL_TMDB}/search/movie?query={filme_procurado}&include_adult=false&language=en-US&page=1"
-    resposta = (requests.get(url, headers=headers)).json()
-    
-    if not resposta['results']:
-        return set()  # Retorna um conjunto vazio se não houver resultados
-    
-    resposta_filme = resposta['results'][0]
-    id_filme = resposta_filme['id']
-    return provider_pelo_id(id_filme)
+    # params= cuida de codificar o título (&, #, ? etc.) na URL
+    resposta = tmdb_get("/search/movie", query=filme_procurado, include_adult="false", language="pt-BR", page=1)
+    resultados = resposta.get("results")
 
+    if not resultados:
+        return None
+
+    return resultados[0]
+
+# Devolve os provedores separados por tipo: assinatura (flatrate), aluguel (rent) e compra (buy)
 def provider_pelo_id(id_filme):
-    url = f"{URL_TMDB}/movie/{id_filme}/watch/providers" 
-    resposta = (requests.get(url, headers=headers)).json()
-   
-    provedores = set()
+    resposta = tmdb_get(f"/movie/{id_filme}/watch/providers")
+    regiao = resposta.get("results", {}).get(REGIAO, {})
 
-    if 'results' not in resposta or 'BR' not in resposta['results']:
-        return provedores  # Retorna um conjunto vazio se não houver resultados para o Brasil
-
-    if 'flatrate' in resposta['results']['BR']:
-        lista_flatrates = resposta['results']['BR']['flatrate'] 
-        for provider in lista_flatrates:
-            if provider['display_priority'] <= 20:
-                provedores.add(provider['provider_name'])
-    
-    if 'buy' in resposta['results']['BR']:
-        lista_buy = resposta['results']['BR']['buy']
-        for provider in lista_buy:
-            if provider['display_priority'] <= 20:
-                provedores.add(provider['provider_name'])
-    
-    if 'rent' in resposta['results']['BR']:
-        lista_rent = resposta['results']['BR']['rent']
-        for provider in lista_buy:
-            if provider['display_priority'] <= 20:
-                provedores.add(provider['provider_name'])
+    provedores = {}
+    for tipo in ("flatrate", "rent", "buy"):
+        # ordena pela prioridade do TMDB (menor = mais relevante), sem descartar ninguém
+        lista = sorted(regiao.get(tipo, []), key=lambda p: p.get("display_priority", 999))
+        provedores[tipo] = [p["provider_name"] for p in lista]
 
     return provedores
-

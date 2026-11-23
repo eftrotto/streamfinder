@@ -92,3 +92,110 @@ header h4 {
 #search-form button:hover {
   background-color: #7d82e0;
 }
+
+/* ---------- Card do filme ---------- */
+#results {
+  margin: 2rem 1rem;
+  width: 100%;
+  max-width: 760px;
+}
+
+.card {
+  display: flex;
+  gap: 1.5rem;
+  text-align: left;
+  background-color: #24252f;
+  border: 2px solid #33343f;
+  border-radius: 20px;
+  padding: 1.25rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* o "*" lá em cima pinta tudo de cor de fundo; dentro do card fica transparente */
+.card * {
+  background-color: transparent;
+}
+
+.card-poster {
+  flex: 0 0 200px;
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.card-poster-vazio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #33343f;
+  color: #8a8b99;
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-titulo {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: bolder;
+}
+
+.card-data {
+  margin: 0.3rem 0 1rem;
+  color: #8a8b99;
+}
+
+.card-sinopse {
+  margin: 0 0 1.25rem;
+  line-height: 1.5;
+  color: #d4d5df;
+}
+
+.card-grupo {
+  margin-bottom: 0.8rem;
+}
+
+.card-grupo-titulo {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: bolder;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.85rem;
+  border-radius: 999px;
+  border: 1px solid #44455a;
+  background-color: #2d2e3b;
+}
+
+.chip-flatrate {
+  border-color: var(--color-primary);
+  background-color: rgba(102, 108, 207, 0.25);
+}
+
+.card-aviso {
+  color: #8a8b99;
+}
+
+/* celular: pôster em cima, informações embaixo */
+@media (max-width: 600px) {
+  .card {
+    flex-direction: column;
+    align-items: center;
+  }
+}
