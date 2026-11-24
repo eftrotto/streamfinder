@@ -1,5 +1,6 @@
 import logging
 import os
+import re
 
 import requests
 from dotenv import load_dotenv
@@ -127,14 +128,30 @@ def provider_pelo_id(id_filme):
 
     provedores = {}
     for tipo in ("flatrate", "rent", "buy"):
-        # ordena pela prioridade do TMDB (menor = mais relevante), sem descartar ninguém
+        # ordena pela prioridade do TMDB (menor = mais relevante)
         lista = sorted(regiao.get(tipo, []), key=lambda p: p.get("display_priority", 999))
-        provedores[tipo] = [
-            {
-                "nome": p["provider_name"],
-                "logo": f"{URL_LOGO}{p['logo_path']}" if p.get("logo_path") else None,
-            }
-            for p in lista
-        ]
+
+        # variantes do mesmo serviço ("Netflix" e "Netflix Standard with Ads") viram um só:
+        # fica a primeira, que é a de maior prioridade
+        vistos = {}
+        for p in lista:
+            nome = nome_do_servico(p["provider_name"])
+            if nome.lower() not in vistos:
+                vistos[nome.lower()] = {
+                    "nome": nome,
+                    "logo": f"{URL_LOGO}{p['logo_path']}" if p.get("logo_path") else None,
+                }
+        provedores[tipo] = list(vistos.values())
 
     return provedores
+
+# Tira do nome o que só indica o plano ou o canal: "Netflix Standard with Ads" -> "Netflix",
+# "Max Amazon Channel" -> "Max"
+SUFIXOS_PLANO = re.compile(
+    r"\s+(?:(?:standard|basic|premium)\s+)?with\s+ads$"
+    r"|\s+(?:amazon|apple\s+tv|roku\s+premium|youtube\s+premium)\s+channel$",
+    re.IGNORECASE,
+)
+
+def nome_do_servico(nome):
+    return SUFIXOS_PLANO.sub("", nome).strip() or nome
