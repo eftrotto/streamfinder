@@ -169,6 +169,35 @@ function criarNotas(notas) {
     return bloco;
 }
 
+// Coloca setas ‹ › em volta da lista rolável (no lugar da barra de rolagem do sistema)
+function criarFaixaComSetas(lista) {
+    const faixa = criarElemento("div", "parecidos-faixa");
+
+    const criarSeta = (classe, simbolo, rotulo, direcao) => {
+        const botao = criarElemento("button", `parecidos-seta ${classe}`, simbolo);
+        botao.type = "button";
+        botao.setAttribute("aria-label", rotulo);
+        botao.addEventListener("click", () => {
+            lista.scrollBy({ left: direcao * lista.clientWidth * 0.8, behavior: "smooth" });
+        });
+        return botao;
+    };
+    const esquerda = criarSeta("parecidos-seta-esq", "‹", "Ver filmes anteriores", -1);
+    const direita = criarSeta("parecidos-seta-dir", "›", "Ver mais filmes", 1);
+
+    // some a seta do lado em que não há mais o que rolar
+    const atualizar = () => {
+        esquerda.disabled = lista.scrollLeft <= 1;
+        direita.disabled = lista.scrollLeft + lista.clientWidth >= lista.scrollWidth - 1;
+    };
+    lista.addEventListener("scroll", atualizar);
+    window.addEventListener("resize", atualizar);
+    requestAnimationFrame(atualizar);
+
+    faixa.append(lista, esquerda, direita);
+    return faixa;
+}
+
 // Fileira de pôsteres de filmes parecidos (aparece embaixo do card, se a API devolver algum)
 async function carregarParecidos(idFilme) {
     try {
@@ -196,7 +225,7 @@ async function carregarParecidos(idFilme) {
             item.append(link);
             lista.append(item);
         }
-        secao.append(lista);
+        secao.append(criarFaixaComSetas(lista));
         resultsSection.append(secao);
     } catch (erro) {
         console.error("Erro ao carregar filmes parecidos:", erro); // sem parecidos a página continua completa
