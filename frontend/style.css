@@ -343,6 +343,18 @@ footer nav {
   gap: 1.5rem;
 }
 
+/* linha de créditos do TMDB/JustWatch, embaixo das outras */
+footer .footer-credito {
+  flex-basis: 100%;
+  max-width: 60rem;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+footer .footer-credito a {
+  text-decoration: underline;
+}
+
 footer a {
   color: var(--color-muted);
   text-decoration: none;
