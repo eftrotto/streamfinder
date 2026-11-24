@@ -83,6 +83,9 @@ header h4 {
   display: flex;
   gap: 0.5rem;
   margin-top: 1.75rem;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  max-width: 100%;
   color-scheme: dark;
 }
 
@@ -92,7 +95,8 @@ header h4 {
   border-radius: 999px;
   padding: 0.9rem 1.5rem;
   font-size: 1rem;
-  width: clamp(220px, 30vw, 440px);
+  width: 100%;
+  box-sizing: border-box;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -110,6 +114,7 @@ header h4 {
   background-image: var(--gradient-brand);
   color: #04101f; /* texto escuro: contrasta melhor com o degradê claro */
   border: none;
+  flex: 0 0 auto;
   border-radius: 999px;
   padding: 0.9rem 1.8rem;
   font-size: 1rem;
@@ -127,6 +132,8 @@ header h4 {
 /* ---------- Sugestões da busca ---------- */
 #busca-wrapper {
   position: relative;
+  flex: 0 1 clamp(220px, 30vw, 440px); /* encolhe em telas estreitas pra o botão caber */
+  min-width: 0;
 }
 
 #sugestoes {
@@ -462,10 +469,59 @@ footer a:hover {
   color: var(--color-muted);
 }
 
+/* ---------- Estado de carregamento (esqueletos) ---------- */
+.esqueleto {
+  background-color: var(--color-surface-2);
+  background-image: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.07) 50%, transparent 100%);
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  animation: brilho 1.4s ease-in-out infinite;
+}
+
+@keyframes brilho {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+.carrossel-esqueleto {
+  width: var(--poster-largura);
+  aspect-ratio: 2 / 3;
+  border-radius: 14px;
+}
+
+/* enquanto carrega, os pôsteres fantasma ficam parados (a esteira só anda com os reais) */
+.carrossel-trilho.carregando {
+  animation: none;
+}
+
+.esqueleto-titulo { height: 2rem; width: 60%; margin-bottom: 0.6rem; border-radius: 8px; }
+.esqueleto-linha { height: 0.9rem; margin-bottom: 0.6rem; border-radius: 6px; }
+.esqueleto-data { width: 25%; margin-bottom: 1.2rem; }
+.esqueleto-curta { width: 55%; }
+.esqueleto-logos { height: 48px; width: 60%; margin-top: 1.4rem; border-radius: 12px; }
+
+/* texto só pra leitor de tela */
+.so-leitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .esqueleto { animation: none; }
+}
+
 /* celular: pôster em cima, informações embaixo */
 @media (max-width: 600px) {
   .card {
     flex-direction: column;
     align-items: center;
+  }
+
+  .card-info {
+    width: 100%;
   }
 }

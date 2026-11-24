@@ -26,7 +26,7 @@ async function carregarFilme() {
         return;
     }
 
-    mostrarTexto("Buscando...");
+    mostrarCarregando();
 
     try {
         const response = await fetch(endereco);
@@ -69,6 +69,24 @@ function criarElemento(tag, classe, texto) {
     if (classe) el.className = classe;
     if (texto) el.textContent = texto;
     return el;
+}
+
+// Card "fantasma" com o mesmo formato do card real, pra página não pular quando o filme chegar
+function mostrarCarregando() {
+    const info = criarElemento("div", "card-info");
+    info.append(
+        criarElemento("span", "so-leitor", "Buscando..."),
+        criarElemento("div", "esqueleto esqueleto-titulo"),
+        criarElemento("div", "esqueleto esqueleto-linha esqueleto-data"),
+        criarElemento("div", "esqueleto esqueleto-linha"),
+        criarElemento("div", "esqueleto esqueleto-linha"),
+        criarElemento("div", "esqueleto esqueleto-linha esqueleto-curta"),
+        criarElemento("div", "esqueleto esqueleto-logos")
+    );
+
+    const card = criarElemento("article", "card");
+    card.append(criarElemento("div", "card-poster esqueleto"), info);
+    resultsSection.replaceChildren(card);
 }
 
 // "2010-07-15" -> "15/07/2010"
