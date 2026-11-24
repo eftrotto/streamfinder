@@ -147,11 +147,68 @@ function criarProvedores(provedores) {
     return bloco;
 }
 
+// Nota média (0 a 10) em destaque + a nota de cada fonte (TMDB, IMDb, Rotten Tomatoes, Metacritic)
+function criarNotas(notas) {
+    const bloco = criarElemento("div", "notas");
+    if (!notas || notas.fontes.length === 0) return bloco; // sem nota nenhuma: não mostra nada
+
+    const media = criarElemento("div", "nota-media");
+    media.append(
+        criarElemento("span", "nota-media-valor", notas.media.toFixed(1)),
+        criarElemento("span", "nota-media-legenda", notas.fontes.length > 1 ? `média de ${notas.fontes.length} fontes` : "nota")
+    );
+    bloco.append(media);
+
+    const fontes = criarElemento("ul", "notas-fontes");
+    for (const fonte of notas.fontes) {
+        const item = criarElemento("li", "nota-fonte");
+        item.append(criarElemento("span", "nota-fonte-nome", fonte.nome), criarElemento("span", "nota-fonte-valor", fonte.texto));
+        fontes.append(item);
+    }
+    bloco.append(fontes);
+    return bloco;
+}
+
+// Fileira de pôsteres de filmes parecidos (aparece embaixo do card, se a API devolver algum)
+async function carregarParecidos(idFilme) {
+    try {
+        const response = await fetch(`${API_URL}/filme/${encodeURIComponent(idFilme)}/parecidos`);
+        if (!response.ok) return;
+        const filmes = await response.json();
+        if (filmes.length === 0) return;
+
+        const secao = criarElemento("section", "parecidos");
+        secao.append(criarElemento("h3", "parecidos-titulo", "Filmes parecidos"));
+
+        const lista = criarElemento("ul", "parecidos-lista");
+        for (const filme of filmes) {
+            const item = criarElemento("li", "parecidos-item");
+            const link = document.createElement("a");
+            link.href = `filme.html?id=${encodeURIComponent(filme.id)}`;
+            link.title = filme.titulo;
+
+            const img = document.createElement("img");
+            img.src = filme.poster;
+            img.alt = `Pôster de ${filme.titulo}`;
+            img.loading = "lazy";
+
+            link.append(img);
+            item.append(link);
+            lista.append(item);
+        }
+        secao.append(lista);
+        resultsSection.append(secao);
+    } catch (erro) {
+        console.error("Erro ao carregar filmes parecidos:", erro); // sem parecidos a página continua completa
+    }
+}
+
 function renderizarResultado(data) {
     const info = criarElemento("div", "card-info");
     info.append(
         criarElemento("h2", "card-titulo", data.titulo),
         criarElemento("p", "card-data", formatarData(data.data_lancamento)),
+        criarNotas(data.notas),
         criarElemento("p", "card-sinopse", data.sinopse || "Sinopse indisponível."),
         criarProvedores(data.provedores)
     );
@@ -160,6 +217,7 @@ function renderizarResultado(data) {
     card.append(criarPoster(data), info);
 
     resultsSection.replaceChildren(card);
+    carregarParecidos(data.id);
 }
 
 carregarFilme();

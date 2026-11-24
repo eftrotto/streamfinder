@@ -489,6 +489,213 @@ footer a:hover {
   color: var(--color-muted);
 }
 
+/* ---------- Notas ---------- */
+.notas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin-bottom: 1.1rem;
+}
+
+.nota-media {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.nota-media-valor {
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1;
+  color: transparent;
+  background-image: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.nota-media-legenda {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.notas-fontes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nota-fonte {
+  display: flex;
+  gap: 0.45rem;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.82rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-2);
+}
+
+.nota-fonte-nome {
+  color: var(--color-muted);
+}
+
+.nota-fonte-valor {
+  font-weight: 700;
+}
+
+/* ---------- Filmes parecidos (página do filme) ---------- */
+.parecidos {
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.parecidos-titulo {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-soft);
+}
+
+.parecidos-lista {
+  display: flex;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0.5rem 0 0.75rem;
+  list-style: none;
+  overflow-x: auto;
+}
+
+.parecidos-item {
+  flex: 0 0 auto;
+}
+
+.parecidos-item a {
+  display: block;
+  border-radius: 12px;
+}
+
+.parecidos-item img {
+  display: block;
+  width: 120px;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.parecidos-item a:hover img,
+.parecidos-item a:focus-visible img {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--color-primary);
+}
+
+/* ---------- Página de resultados (grade de pôsteres) ---------- */
+.resultados-main {
+  width: 100%;
+  max-width: 1500px;
+  padding: 0 clamp(1rem, 3vw, 3rem);
+  box-sizing: border-box;
+}
+
+.resultados-titulo {
+  align-self: flex-start;
+  margin: 0 0 1.25rem;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  font-weight: 800;
+  text-align: left;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(130px, 12vw, 200px), 1fr));
+  gap: clamp(0.9rem, 1.6vw, 1.75rem);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.grade-item a {
+  display: block;
+  text-align: left;
+  text-decoration: none;
+  border-radius: 14px;
+}
+
+.grade-item img,
+.grade-sem-poster,
+.grade-esqueleto-poster {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 14px;
+  background-color: var(--color-surface);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.grade-sem-poster {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-muted);
+  background-color: var(--color-surface-2);
+}
+
+.grade-item a:hover img,
+.grade-item a:focus-visible img,
+.grade-item a:hover .grade-sem-poster {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--color-primary), 0 0 24px rgba(61, 194, 255, 0.3);
+}
+
+.grade-titulo {
+  display: block;
+  margin-top: 0.6rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.grade-ano {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.botao-secundario {
+  margin: 2rem auto 0;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.botao-secundario:hover {
+  border-color: var(--color-primary);
+}
+
+.botao-secundario:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.resultados-main .card-aviso {
+  margin-top: 1rem;
+}
+
 /* ---------- Estado de carregamento (esqueletos) ---------- */
 .esqueleto {
   background-color: var(--color-surface-2);
