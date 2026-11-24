@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="config.js" defer></script>
     <script src="carrossel.js" defer></script>
+    <script src="sugestoes.js" defer></script>
 </head>
 
 <body>
@@ -23,14 +24,23 @@
 
     <main>
         <form id="search-form" action="filme.html" method="get">
-            <input 
-                type="text" 
-                id="movie-input"
-                name="busca"
+            <div id="busca-wrapper">
+                <input
+                    type="text"
+                    id="movie-input"
+                    name="busca"
+                    autocomplete="off"
+                    role="combobox"
+                    aria-expanded="false"
+                    aria-controls="sugestoes"
+                    aria-autocomplete="list"
 
-                placeholder="Digite o nome de um filme..." 
-                required
-            >
+                    placeholder="Digite o nome de um filme..."
+                    required
+                >
+                <!-- O sugestoes.js preenche esta lista enquanto o usuário digita -->
+                <ul id="sugestoes" role="listbox" aria-label="Sugestões de filmes" hidden></ul>
+            </div>
             <button type="submit">Buscar</button>
         </form>
 

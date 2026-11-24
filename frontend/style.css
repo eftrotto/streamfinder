@@ -124,6 +124,66 @@ header h4 {
   box-shadow: 0 8px 22px rgba(61, 194, 255, 0.35);
 }
 
+/* ---------- Sugestões da busca ---------- */
+#busca-wrapper {
+  position: relative;
+}
+
+#sugestoes {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  z-index: 10;
+  margin: 0;
+  padding: 0.4rem;
+  list-style: none;
+  text-align: left;
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 20px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+}
+
+#sugestoes a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 14px;
+  text-decoration: none;
+}
+
+#sugestoes li:hover a,
+#sugestoes li[aria-selected="true"] a {
+  background-color: var(--color-surface-2);
+}
+
+#sugestoes img,
+.sugestao-sem-poster {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 54px;
+  border-radius: 6px;
+  object-fit: cover;
+  background-color: var(--color-surface-2);
+}
+
+.sugestao-titulo {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.sugestao-ano {
+  flex: 0 0 auto;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
 /* ---------- Carrossel de populares (home) ---------- */
 /* o main ocupa a largura toda; sem isso ele encolhe pro tamanho do trilho e o carrossel não rola */
 main {

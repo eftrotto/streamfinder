@@ -67,6 +67,25 @@ def populares():
         for f in filmes[:10]
     ]
 
+# Sugestões enquanto o usuário digita (dropdown da home): até 6 filmes, com miniatura
+@app.get("/sugestoes")
+def sugestoes(q: str = ""):
+    q = q.strip()
+    if len(q) < 2:
+        return []
+
+    resposta = tmdb_get("/search/movie", query=q, include_adult="false", language="pt-BR", page=1)
+
+    return [
+        {
+            "id": f["id"],
+            "titulo": f["title"],
+            "ano": (f.get("release_date") or "")[:4],
+            "poster": f"{URL_LOGO}{f['poster_path']}" if f.get("poster_path") else None,
+        }
+        for f in resposta.get("results", [])[:6]
+    ]
+
 # Transforma um filme do TMDB no JSON que o front usa (a mesma forma em /busca e /filme)
 def montar_filme(filme):
     poster = filme.get("poster_path")
