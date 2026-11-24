@@ -250,10 +250,18 @@ main {
   animation: esteira var(--duracao, 40s) linear infinite;
 }
 
-/* passou o mouse ou focou com o teclado: pausa, pra dar tempo de clicar */
-.carrossel-janela:hover .carrossel-trilho,
-.carrossel-janela:focus-within .carrossel-trilho {
+/* focou com o teclado, ou está com o dedo apoiado (.pausado, via carrossel.js): pausa */
+.carrossel-janela:focus-within .carrossel-trilho,
+.carrossel-janela.pausado .carrossel-trilho {
   animation-play-state: paused;
+}
+
+/* passou o mouse: pausa, pra dar tempo de clicar. Só em telas com mouse: no celular o
+   :hover "gruda" depois do toque e a esteira ficaria parada pra sempre */
+@media (hover: hover) {
+  .carrossel-janela:hover .carrossel-trilho {
+    animation-play-state: paused;
+  }
 }
 
 @keyframes esteira {

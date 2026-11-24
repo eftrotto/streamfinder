@@ -81,4 +81,14 @@ async function carregarPopulares() {
     }
 }
 
+// No celular não existe "passar o mouse": segurar o dedo na esteira pausa, soltar volta a andar.
+// (pointercancel acontece quando o dedo vira rolagem da página, então também retoma.)
+const janela = trilho.parentElement;
+janela.addEventListener("pointerdown", (e) => {
+    if (e.pointerType === "touch") janela.classList.add("pausado");
+});
+for (const evento of ["pointerup", "pointercancel"]) {
+    janela.addEventListener(evento, () => janela.classList.remove("pausado"));
+}
+
 carregarPopulares();
