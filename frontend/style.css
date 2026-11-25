@@ -129,6 +129,21 @@ header h4 {
   box-shadow: 0 8px 22px rgba(61, 194, 255, 0.35);
 }
 
+/* celular: menos respiro lateral no campo e no botão, pra o texto do campo caber inteiro */
+@media (max-width: 480px) {
+  #search-form {
+    padding: 0 0.75rem;
+  }
+
+  #movie-input {
+    padding: 0.9rem 1.1rem;
+  }
+
+  #search-form button {
+    padding: 0.9rem 1.3rem;
+  }
+}
+
 /* ---------- Sugestões da busca ---------- */
 #busca-wrapper {
   position: relative;
